@@ -1,0 +1,56 @@
+include modals/help-modal
+
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+    div#navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+            if(currentPage == "/")
+                li.nav-item
+                    a.nav-link.active(href="/", target="_self") Главная
+            else
+                li.nav-item
+                    a.nav-link(href="/", target="_self") Главная
+
+            if(currentPage == "/refers")
+                li.nav-item
+                    a.nav-link.active(href="/refers", target="_self") Статистика
+            else
+                li.nav-item
+                    a.nav-link(href="/refers", target="_self") Статистика
+
+            if(currentPage == "/calendar")
+                li.nav-item
+                    a.nav-link.active(href="/calendar", target="_self") Календарь
+            else
+                li.nav-item
+                    a.nav-link(href="/calendar", target="_self") Календарь
+
+            if(currentPage == "/config")
+                li.nav-item
+                    a.nav-link.active(href="/config", target="_self") Параметры
+            else
+                li.nav-item
+                    a.nav-link(href="/config", target="_self") Параметры
+
+            if(currentPage == "/names")
+                li.nav-item
+                    a.nav-link.active(href="/names", target="_self") Специалисты
+            else
+                li.nav-item
+                    a.nav-link(href="/names", target="_self") Специалисты
+
+            if(currentPage == "/operations")
+                li.nav-item
+                    a.nav-link.active(href="/operations", target="_self") Операции
+            else
+                li.nav-item
+                    a.nav-link(href="/operations", target="_self") Операции
+
+            if(currentPage == "/help")
+                li.nav-item
+                    a.nav-link.active.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
+            else
+                li.nav-item
+                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
+    span.navbar-brand.text-right()=status

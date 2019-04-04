@@ -1,0 +1,83 @@
+include application
+currentPage = "/refers"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    form#dateForm(method="post" action="#")
+                        div.form-group
+                            if(dateFrom != '')
+                                label(for="DateRecFrom")="От:"
+                                input.form-control(type="date", name="dateRecFrom", id="DateRecFrom", value=dateFrom.strftime("%Y-%m-%d"), style="color:blue")
+                            else
+                                label(for="DateRecFrom")="От:"
+                                input.form-control(type="date", name="dateRecFrom", id="DateRecFrom")
+                        div.form-group
+                            if(timeFrom != '')
+                                input.form-control(type="time", name="timeRecFrom", id="TimeRecFrom", value=timeFrom.strftime("%H:%M"), style="color:blue")
+                            else
+                                input.form-control(type="time", name="timeRecFrom", id="TimeRecFrom")
+                        hr
+                        div.form-group
+                            if(dateTo != '')
+                                label(for="DateRecTo")="До:"
+                                input.form-control(type="date", name="dateRecTo", id="DateRecTo", value=dateTo.strftime("%Y-%m-%d"), style="color:blue")
+                            else
+                                label(for="DateRecTo")="До:"
+                                input.form-control(type="date", name="dateRecTo", id="DateRecTo")
+                        div.form-group
+                            if(timeTo != '')
+                                input.form-control(type="time", name="timeRecTo", id="TimeRecTo", value=timeTo.strftime("%H:%M"), style="color:blue")
+                            else
+                                input.form-control(type="time", name="timeRecTo", id="TimeRecTo")
+                        hr
+                        div.form-group
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                if(alph=='True')
+                                    input.custom-control-input(type="checkbox", id='AlphRB', name="alph", checked)
+                                    label.custom-control-label(for='AlphRB')="По алфавиту"
+                                else
+                                    input.custom-control-input(type="checkbox", id='AlphRB', name="alph")
+                                    label.custom-control-label(for='AlphRB')="По алфавиту"
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                if(asc=='True')
+                                    input.custom-control-input(type="checkbox", id='AscRB', name="asc", checked)
+                                    label.custom-control-label(for='AscRB')="По возрастанию"
+                                else
+                                    input.custom-control-input(type="checkbox", id='AscRB', name="asc")
+                                    label.custom-control-label(for='AscRB')="По возрастанию"
+                            hr
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                if(new_calls == 'True')
+                                    input.custom-control-input(type="checkbox", id='newC', name="new_calls", checked)
+                                    label.custom-control-label(for='newC')="Новые звонки"
+                                else
+                                    input.custom-control-input(type="checkbox", id='newC', name="new_calls")
+                                    label.custom-control-label(for='newC')="Новые звонки"
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                if(repeat_calls == 'True')
+                                    input.custom-control-input(type="checkbox", id='repeatC', name="repeat_calls", checked)
+                                    label.custom-control-label(for='repeatC')="Повторные звонки"
+                                else
+                                    input.custom-control-input(type="checkbox", id='repeatC', name="repeat_calls")
+                                    label.custom-control-label(for='repeatC')="Повторные звонки"
+
+                        button.btn.btn-success(href="#" type="submit")="Показать"
+            .card.card-block
+                .card-body
+                    h3='Распознания'
+                    p='Всего записей в выбранном периоде: '~notes_count
+                    table.table.table-striped
+                        tbody
+                            thead
+                                td="Специалист"
+                                td="Количество упоминаний"
+                            each item in refers
+                                tr
+                                    td
+                                        a(href=url_for('index', specialist=item.doctor.id))=item.doctor.surname + " " + item.doctor.name + " " + item.doctor.middle_name
+                                    td=item.refer_num

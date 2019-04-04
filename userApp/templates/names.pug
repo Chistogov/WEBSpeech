@@ -1,0 +1,70 @@
+include application
+currentPage = "/names"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    h3='Добавить специалиста'
+                    form#namesForm(method="post" action="#")
+                        div.form-group
+                            .row
+                                div.col-md-4
+                                    label(for="surname")="Фамилия"
+                                    input#surname.form-control(type="text", name="surname", required)
+                                div.col-md-4
+                                    label(for="name")="Имя"
+                                    input#name.form-control(type="text", name="name", required)
+                                div.col-md-4
+                                    label(for="middle_name")="Отчество"
+                                    input#middle_name.form-control(type="text", name="middle_name", required)
+                        div.form-group
+                            .row
+                                div.col-md-4
+                                    label(for="short_surname")="Фамилия (несклоняемая часть)"
+                                    input#short_surname.form-control(type="text", name="short_surname", required)
+                                div.col-md-4
+                                    label(for="short_name")="Имя (несклоняемая часть)"
+                                    input#short_name.form-control(type="text", name="short_name", required)
+                                div.col-md-4
+                                    label(for="short_middle_name")="Отчество (несклоняемая часть)"
+                                    input#short_middle_name.form-control(type="text", name="short_middle_name", required)
+                        div.form-group
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                input.custom-control-input(type="checkbox", id='search_ref', name="search_ref")
+                                label.custom-control-label(for='search_ref')="Найти упоминания"
+                        button.btn.btn-success(href="#" type="submit")="Сохранить"
+
+            .card.card-block
+                .card-body
+                    h3='Специалисты'
+                    table.table.table-striped
+                        tbody
+                            thead
+                                td="Фамилия"
+                                td="Имя"
+                                td="Отчество"
+                                td=""
+                            each name in names
+                                tr
+                                    td=name.surname + '(' + name.short_surname + ')'
+                                    td=name.name + '(' + name.short_name + ')'
+                                    td=name.middle_name + '(' + name.short_middle_name + ')'
+                                    td
+                                        .row
+                                            div.col-md-10
+                                                a.btn.btn-success(href="names/refers/"~name.id)="Переопределить упоминания"
+                                            div.col-md-2
+                                                a.btn.btn-info(data-toggle="modal", data-target="#remove-modal"~name.id)="X"
+                                div.modal.fade(id = "remove-modal"~name.id, tabindex="-1", role="dialog", aria-hidden="true")
+                                    div.modal-dialog.modal-lg(role="document")
+                                        div.modal-content
+                                            div.modal-header
+                                                h3="Предупреждение"
+                                            div.modal-body
+                                                h5="Удаление специалиста приведет также к удалению всех его упоминаний во всех записях"
+                                            div.modal-footer
+                                                a.btn.btn-danger(href="names/remove/"~name.id)="Удалить"

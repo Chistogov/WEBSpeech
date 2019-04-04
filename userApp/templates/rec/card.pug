@@ -1,0 +1,57 @@
+include application
+currentPage = "/rec"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-header
+                    h3=note.record_name
+                .card-body
+                    h5="Администратор: " + note.admin_name
+                    hr
+                    if(note.date.minute > 9)
+                        h5="Время звонка: "~note.date.date()~" "~note.date.hour~":"~note.date.minute
+                    else
+                        h5="Время звонка: "~note.date.date()~" "~note.date.hour~":0"~note.date.minute
+                    hr
+                    h5="Пациент: " + note.pacient_name
+                    hr
+                    if(note.new_call)
+                        h5="Тип звонка: Новый"
+                    else
+                        h5="Тип звонка: Повторный"
+                    hr
+                    h5="Инструмент распознания: " + note.recognizer
+                    hr
+                    h5="Текст (пациент):"
+                    if not(note.text)
+                        a(href="/pacient_processing/"~note.id)='Перевести звук в текст'
+                    else
+                        p=note.text
+                        a(href="/pacient_processing/"~note.id)='Перевести звук в текст'
+                    hr
+                    h5="Упоминания специалистов: "
+                    each itm in note.name_rec
+                        if(itm.pacient)
+                            p=itm.names_.surname + " " + itm.names_.name + " " + itm.names_.middle_name
+                    a(href="/entries_pacient/"~note.id)='Переопределить упоминания'
+                    hr
+                    h5="Текст (Оператор): "
+                    if not(note.admin_text)
+                        a(href="/adm_processing/"~note.id)='Перевести звук в текст'
+                    else
+                        p=note.admin_text
+                        a(href="/adm_processing/"~note.id)='Перевести звук в текст'
+                    hr
+                    h5="Упоминания специалистов: "
+                    each itm in note.name_rec
+                        if not(itm.pacient)
+                            p=itm.names_.surname + " " + itm.names_.name + " " + itm.names_.middle_name
+                    a(href="/entries_adm/"~note.id)='Переопределить упоминания'
+
+                    hr
+                    audio(controls)
+                        source(src="/audio/"~note.record_name, type="audio/mpeg")

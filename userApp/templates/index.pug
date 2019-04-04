@@ -1,0 +1,139 @@
+include application
+currentPage = "/"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    form#dateForm(method="post" action="#")
+                            div.form-group
+                                if(dateFrom != '')
+                                    label(for="DateRecFrom")="От:"
+                                    input.form-control(type="date", name="dateRecFrom", id="DateRecFrom", value=dateFrom.strftime("%Y-%m-%d"), style="color:blue")
+                                else
+                                    label(for="DateRecFrom")="От:"
+                                    input.form-control(type="date", name="dateRecFrom", id="DateRecFrom")
+                            div.form-group
+                                if(dateTo != '')
+                                    label(for="DateRecTo")="До:"
+                                    input.form-control(type="date", name="dateRecTo", id="DateRecTo", value=dateTo.strftime("%Y-%m-%d"), style="color:blue")
+                                else
+                                    label(for="DateRecTo")="До:"
+                                    input.form-control(type="date", name="dateRecTo", id="DateRecTo")
+                            hr
+                            div.form-group
+                                if(specialist_name)
+                                    label(for="Spec")=specialist_name.surname + " " + specialist_name.name + " " + specialist_name.middle_name
+                                select.form-control#Spec(name="specialist")
+                                    option(value="", disabled, selected)="Специалист"
+                                    for name in names
+                                        option(value=name.id)=name.surname + " " + name.name + " " + name.middle_name
+                            div.form-group
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                    if(new_calls == 'True')
+                                        input.custom-control-input(type="checkbox", id='newC', name="new_calls", checked)
+                                        label.custom-control-label(for='newC')="Новые звонки"
+                                    else
+                                        input.custom-control-input(type="checkbox", id='newC', name="new_calls")
+                                        label.custom-control-label(for='newC')="Новые звонки"
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                    if(repeat_calls == 'True')
+                                        input.custom-control-input(type="checkbox", id='repeatC', name="repeat_calls", checked)
+                                        label.custom-control-label(for='repeatC')="Повторные звонки"
+                                    else
+                                        input.custom-control-input(type="checkbox", id='repeatC', name="repeat_calls")
+                                        label.custom-control-label(for='repeatC')="Повторные звонки"
+                            button.btn.btn-success(href="#" type="submit")="Показать"
+
+            .card.card-block
+                .card-body
+                    h3='Распознания'
+                    div#accordion
+                        each item in history
+                            if(item.rec)
+                                .card
+                                    .card-header(id=item.date~"head")
+                                        button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#"~item.date~"list", aria-expanded="false", aria-controls="collapse-date")=item.date
+                                    div.collapse(id=item.date~"list", aria-labelledby=item.date, data-parent="#accordion")
+                                        div.card-body
+                                            table.table.table-striped
+                                                tbody
+                                                    thead
+                                                        td="Администратор"
+                                                        td="Пациент"
+                                                        td="Тип"
+                                                        td="Время"
+                                                        td="Инструмент распознания"
+                                                        td="Упоминания специалистов"
+                                                    each punkt in item.rec
+                                                        each note in punkt.notes
+                                                            tr
+                                                                td
+                                                                    if(note.admin_name)
+                                                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)=note.admin_name
+                                                                td
+                                                                    if(note.pacient_name)
+                                                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)=note.pacient_name
+                                                                td
+                                                                    if(note.new_call)
+                                                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)="Новый"
+                                                                    else
+                                                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)="Повторный"
+                                                                td
+                                                                    if(note.date.minute > 9)
+                                                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)=note.date.hour~":"~note.date.minute
+                                                                    else
+                                                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)=note.date.hour~":0"~note.date.minute
+                                                                td
+                                                                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)=note.recognizer
+                                                                td
+                                                                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#rec-modal"~note.id)
+                                                                        each itm in note.name_rec
+                                                                            p=itm.names_.surname + " " + itm.names_.name + " " + itm.names_.middle_name
+                                                                div.modal.fade(id = "rec-modal"~note.id, tabindex="-1", role="dialog", aria-hidden="true")
+                                                                    div.modal-dialog.modal-lg(role="document")
+                                                                        div.modal-content
+                                                                            div.modal-header
+                                                                                h3=note.record_name
+                                                                            div.modal-body
+                                                                                h5="Администратор: "+note.admin_name
+                                                                                hr
+                                                                                if(note.date.minute > 9)
+                                                                                    h5="Время звонка: "~note.date.hour~":"~note.date.minute
+                                                                                else
+                                                                                    h5="Время звонка: "~note.date.hour~":0"~note.date.minute
+                                                                                hr
+                                                                                h5="Пациент: "+note.pacient_name
+                                                                                hr
+                                                                                if(note.new_call)
+                                                                                    h5="Тип звонка: Новый"
+                                                                                else
+                                                                                    h5="Тип звонка: Повторный"
+                                                                                hr
+                                                                                h5="Инструмент распознания: "+note.recognizer
+                                                                                hr
+                                                                                h5="Текст (пациент):"
+                                                                                if(note.text)
+                                                                                    p=note.text
+                                                                                hr
+                                                                                h5="Упоминания специалистов: "
+                                                                                each itm in note.name_rec
+                                                                                    if(itm.pacient)
+                                                                                        p=itm.names_.surname + " " + itm.names_.name + " " + itm.names_.middle_name
+                                                                                hr
+                                                                                h5="Текст (Оператор): "
+                                                                                if(note.admin_text)
+                                                                                    p=note.admin_text
+                                                                                hr
+                                                                                h5="Упоминания специалистов: "
+                                                                                each itm in note.name_rec
+                                                                                    if not(itm.pacient)
+                                                                                        p=itm.names_.surname + " " + itm.names_.name + " " + itm.names_.middle_name
+                                                                                hr
+                                                                                audio(controls)
+                                                                                    source(src="/audio/"~note.record_name, type="audio/mpeg")
+                                                                            div.modal-footer
+                                                                                a.btn.btn-info(href="/rec/"~note.id)='Карточка записи'

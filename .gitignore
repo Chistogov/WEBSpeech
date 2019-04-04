@@ -1,0 +1,13 @@
+.idea/
+__pycache__/
+penv/
+test/
+archive/
+sound/
+static/
+templates/static/
+*.pyc
+*.h5py
+*.json
+config.py
+flaskapp.wsgi

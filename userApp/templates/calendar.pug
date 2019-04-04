@@ -1,0 +1,102 @@
+include application
+currentPage = "/calendar"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-header
+                    .row
+                        div.col-md-4
+                            a.btn.btn-info(href="/calendar/prev/"~current_date)='Предыдущий'
+                        div.col-md-4
+                            if (current_date.month == 1)
+                                h3.text-center="Январь "~current_date.year
+                            if (current_date.month == 2)
+                                h3.text-center="Февраль "~current_date.year
+                            if (current_date.month == 3)
+                                h3.text-center="Март "~current_date.year
+                            if (current_date.month == 4)
+                                h3.text-center="Апрель "~current_date.year
+                            if (current_date.month == 5)
+                                h3.text-center="Май "~current_date.year
+                            if (current_date.month == 6)
+                                h3.text-center="Июнь "~current_date.year
+                            if (current_date.month == 7)
+                                h3.text-center="Июль "~current_date.year
+                            if (current_date.month == 8)
+                                h3.text-center="Август "~current_date.year
+                            if (current_date.month == 9)
+                                h3.text-center="Сентябрь "~current_date.year
+                            if (current_date.month == 10)
+                                h3.text-center="Октябрь "~current_date.year
+                            if (current_date.month == 11)
+                                h3.text-center="Ноябрь "~current_date.year
+                            if (current_date.month == 12)
+                                h3.text-center="Декабрь "~current_date.year
+                            //h3.text-center=month
+                        div.col-md-4
+                            a.btn.btn-info.float-right(href="/calendar/next/"~current_date)='Следующий'
+                .card-body
+                    table.table.table-striped
+                        tbody
+                            thead
+                                td.text-center="ПН"
+                                td.text-center="ВТ"
+                                td.text-center="СР"
+                                td.text-center="ЧТ"
+                                td.text-center="ПТ"
+                                td.text-center="СБ"
+                                td.text-center="ВС"
+                            tr
+                                each dt in dates
+                                    if(dt.date.day == 1)
+                                        if(dt.date.weekday() != 0)
+                                            each t in range(dt.date.weekday())
+                                                td
+                                    td.text-center
+                                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#date"~dt.date.day)
+                                            if(dt.num_recs == dt.num_files)
+                                                if(dt.num_recs != 0)
+                                                    span(style="font-weight: bold;color:green")=dt.date.day
+                                                else
+                                                    span(style="font-weight: bold;")=dt.date.day
+                                            else
+                                                if(dt.num_files != 0)
+                                                    span(style="font-weight: bold;color:green")=dt.date.day
+                                                else
+                                                    span(style="font-weight: bold;color:blue")=dt.date.day
+                                    if(dt.date.weekday() == 6)
+                                        tr
+                                        tr
+                                    div.modal.fade(id = "date"~dt.date.day, tabindex="-1", role="dialog", aria-hidden="true")
+                                        div.modal-dialog.modal-lg(role="document")
+                                            div.modal-content
+                                                div.modal-body
+                                                    h5="Дата: " + dt.date
+                                                    hr
+                                                    h5="Файлов в архиве: " + dt.num_files
+                                                    if(dt.num_recs != 0)
+                                                        if(dt.num_recs < dt.num_files)
+                                                            a(href="/calendar/recognize/"~dt.date)='Распознать'
+                                                        else
+                                                            a(href="/calendar/recognize/"~dt.date)='Перераспознание всех записей'
+                                                    else
+                                                        a(href="/calendar/download/"~dt.date)='Выгрузить записи за день(Oktell)'
+                                                    hr
+                                                    h5="Файлов распознано: " + dt.num_recs
+                                                    form#dateForm(method="post" action="#")
+                                                        input.hidden(name = "date", value=dt.date, hidden)
+                                                        div.form-group
+                                                            label(for="TimeRecFrom")="От:"
+                                                            input.form-control(type="time", name="timeRecFrom", id="TimeRecFrom")
+                                                        hr
+                                                        div.form-group
+                                                            label(for="TimeRecTo")="До:"
+                                                            input.form-control(type="time", name="timeRecTo", id="TimeRecTo")
+                                                        button.btn.btn-success(href="#" type="submit")="Загрузить"
+                                                    p.font-italic="После загрузки файлы будут распознаны в порядке общей очереди"
+                                                div.modal-footer
+                                                    a.btn.btn-info(href=url_for('index', dateFrom=dt.date~" 00:00:00", dateTo=dt.date~" 00:00:00"))='Записи за день'

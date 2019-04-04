@@ -1,0 +1,99 @@
+include application
+currentPage = "/config"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    h3='Параметры распознания'
+                    form#paramForm(method="post" action="#")
+                        div.form-group
+                            label(for="cleanerTimeout")="Хранить записи (дней)"
+                            input#cleanerTimeout.form-control(type="number", name="cleanerTimeout", value=config.cleanerTimeout, required)
+                        div.form-group
+                            label(for="delta_rec")="Распознание старых записей(суток) (0-распознание отключено)"
+                            input#delta_rec.form-control(type="number", name="delta_rec", value=config.delta_rec, required)
+                        h5='Автоматически распознавать записи'
+                        .row
+                            div.col-md-6
+                                div.form-group
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.new_calls)
+                                            input.custom-control-input(type="checkbox", id='newC', name="new_calls", checked)
+                                            label.custom-control-label(for='newC')="Новые звонки"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='newC', name="new_calls")
+                                            label.custom-control-label(for='newC')="Новые звонки"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.repeat_calls)
+                                            input.custom-control-input(type="checkbox", id='repeatC', name="repeat_calls", checked)
+                                            label.custom-control-label(for='repeatC')="Повторные звонки"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='repeatC', name="repeat_calls")
+                                            label.custom-control-label(for='repeatC')="Повторные звонки"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.pacient_voice)
+                                            input.custom-control-input(type="checkbox", id='pacientV', name="pacient_voice", checked)
+                                            label.custom-control-label(for='pacientV')="Голос пациента"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='pacientV', name="pacient_voice")
+                                            label.custom-control-label(for='pacientV')="Голос пациента"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.admin_voice)
+                                            input.custom-control-input(type="checkbox", id='adminV', name="admin_voice", checked)
+                                            label.custom-control-label(for='adminV')="Голос администратора"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='adminV', name="admin_voice")
+                                            label.custom-control-label(for='adminV')="Голос администратора"
+                            div.col-md-6
+                                div.form-group
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.task_call)
+                                            input.custom-control-input(type="checkbox", id='taskC', name="task_call", checked)
+                                            label.custom-control-label(for='taskC')="Задача"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='taskC', name="task_call")
+                                            label.custom-control-label(for='taskC')="Задача"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.input_call)
+                                            input.custom-control-input(type="checkbox", id='inputC', name="input_call", checked)
+                                            label.custom-control-label(for='inputC')="Входящий звонок"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='inputC', name="input_call")
+                                            label.custom-control-label(for='inputC')="Входящий звонок"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.output_call)
+                                            input.custom-control-input(type="checkbox", id='outputC', name="output_call", checked)
+                                            label.custom-control-label(for='outputC')="Исходящий звонок"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='outputC', name="output_call")
+                                            label.custom-control-label(for='outputC')="Исходящий звонок"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.internal_call)
+                                            input.custom-control-input(type="checkbox", id='internalC', name="internal_call", checked)
+                                            label.custom-control-label(for='internalC')="Внутренний звонок"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='internalC', name="internal_call")
+                                            label.custom-control-label(for='internalC')="Внутренний звонок"
+                        h5='Сервисы распознания'
+                        .row
+                            div.col-md-12
+                                div.form-group
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.google)
+                                            input.custom-control-input(type="checkbox", id='google', name="google", checked)
+                                            label.custom-control-label(for='google')="Google"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='google', name="google")
+                                            label.custom-control-label(for='google')="Google"
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        if(config.yandex)
+                                            input.custom-control-input(type="checkbox", id='yandex', name="yandex", checked)
+                                            label.custom-control-label(for='yandex')="Yandex"
+                                        else
+                                            input.custom-control-input(type="checkbox", id='yandex', name="yandex")
+                                            label.custom-control-label(for='yandex')="Yandex"
+                        button.btn.btn-success(href="#" type="submit")="Сохранить"

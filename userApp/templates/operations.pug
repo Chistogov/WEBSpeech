@@ -1,0 +1,24 @@
+include application
+currentPage = "/operations"
+include navBar
+
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    h3='Загрузить и перевести в текст записи'
+                    form#namesForm(method="post" action="#")
+                        div.form-group
+                            label(for="DateRecFrom")="От:"
+                            input.form-control(type="date", name="dateRecFrom", id="DateRecFrom", required)
+                        div.form-group
+                            input.form-control(type="time", name="timeRecFrom", id="TimeRecFrom")
+                        hr
+                        div.form-group
+                            label(for="DateRecTo")="До:"
+                            input.form-control(type="date", name="dateRecTo", id="DateRecTo", required)
+                        div.form-group
+                            input.form-control(type="time", name="timeRecTo", id="TimeRecTo")
+                        button.btn.btn-success(href="#" type="submit")="Загрузить"
